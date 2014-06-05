@@ -1,0 +1,6 @@
+<h1> Issue Tracker </h1>
+<ul>
+{% for issue in issues %}
+<li><a href="{% url 'issue_detail' issue.pk %}"> {{ issue }} </a></li>
+{% endfor %}
+</ul>
