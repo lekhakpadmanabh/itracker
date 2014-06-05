@@ -1,4 +1,13 @@
 <h1> Issue Tracker </h1>
+
+<h3> Add new issue: </h3>
+
+<form action="" method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit" name="submit"> Add! </button>
+</form>
+
 <ul>
 {% for issue in issues %}
 <li><a href="{% url 'issue_detail' issue.pk %}"> {{ issue }} </a></li>
