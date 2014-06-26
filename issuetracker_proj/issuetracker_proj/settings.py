@@ -37,6 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'issuetracker',
+    'django.contrib.humanize',
+    'tastypie',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,3 +83,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
+
+TEMPLATE_DIRS = (os.path.join(BASE_DIR,'templates'),)
+
+LOGIN_URL = 'issue_login'
+LOGOUT_URL = 'issue_logout'
+LOGIN_REDIRECT_URL = 'issue_home'

@@ -1,4 +1,34 @@
-<h2> {{ issue.title }} </h2>
+{% extends 'base.html' %}
+{% load staticfiles %}
 
+{% block title %} MN Issue: {{ issue.title }} {% endblock %}
+
+{%block content %}
+<h2> {{ issue.title }} </h2>
+<div class="col-md-4 well">
 <p> Description: {{ issue.description }} </p>
-<p> Category: {{ issue.category }} </p>
+<p> Category: {{ issue.get_category_display }} </p>
+<p> Author:  {{ issue.author }} </p>
+
+{% if user == issue.author %}
+    <p><a href="{% url 'issue_update' issue.pk%}">Edit</a></p>
+{% else %}
+
+{% endif %}
+
+<h2> Timeline Here.. </h2>
+</div>
+
+<div class="col-md-8 ">
+<form action="{% url 'issue_comment_create' issue.pk %}" method="post"> 
+    {% csrf_token %}
+    {{ commentform.as_p }}
+    <button type="submit" name="submit" class="btn btn-primary"> Add Comment </button>
+</form>
+<hr/>
+{%for comment in issue.issuecomment_set.all %}
+<p>{{comment.content}} - {{comment.author}}</p>
+{% endfor %}
+</div>
+
+{% endblock%}

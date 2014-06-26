@@ -1,15 +1,137 @@
-<h1> Issue Tracker </h1>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load humanize %}
 
-<h3> Add new issue: </h3>
+{%block title %}
+Issue Tracker Home
+{% endblock %}
 
-<form action="" method="post">
-{% csrf_token %}
-{{ form.as_p }}
-<button type="submit" name="submit"> Add! </button>
-</form>
+{% block content %}
+<!-- Script for ToDo list -->
+<script> 
+$(document).ready(function () {
+    var todoList = document.getElementById('todoList');
+    $('#saveAll').click(funciton (e) {
+        e.preventDefault();
+        localStorage.setItem('todoList',todoList.innerHTML);
+    });
+});
 
-<ul>
+</script>
+
+
+<!-- --------------Issue Tracker Code Here------------- -->
+<h2> Issue Tracker </h2>
+<!-- Modal Dialog for adding new issue form-->
+<button class="btn btn-success btn-md" data-toggle="modal" data-target="#myModal">
+  <span class="glyphicon glyphicon-plus"></span> New Ticket
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Add new Ticket</h4>
+      </div>
+      <div class="modal-body">
+        <form action="/issue/new/" method="post">
+        {% csrf_token %}
+        {{ issueform.as_p }}
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" name="submit" class="btn btn-primary"> Add! </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End modal-->
+
+<!-- List of all issues -->
+<table class="table table-hover issue-table">
+<tr>
+<th class="col-lg-6 col-md-6 col-sm-6 col-xs-6">Issue </th>
+<th> Last updated </th>
+<th> Category </th>
+<th> Status </th>
+{% if perms.issuetracker.can_modify_itmod %}
+<th> Priority </th>
+<th> Set </th>
+{% endif %}
+
+</tr>
 {% for issue in issues %}
-<li><a href="{% url 'issue_detail' issue.pk %}"> {{ issue }} </a></li>
+<tr>
+<td> 
+    <a href="{% url 'issue_detail' issue.pk %}"> {{ issue }} </a>
+</td>
+<td>{{ issue.date_modified|naturaltime }}</td>
+<td><span class="label label-default"> {{ issue.get_category_display }}</span></td>
+<td> {{ issue.issuemoderation.get_status_display }}</td>
+{% if perms.issuetracker.can_modify_itmod %}
+<td> {% if issue.priority %}
+       {{ issue.get_priority_display }}
+     {% else %}
+       N/A
+     {% endif %}
+</td>
+<td> 
+        <!-- Button trigger modal -->
+        <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#setModal{{ issue.pk }}">
+          <span class="glyphicon glyphicon-wrench"></span> 
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="setModal{{ issue.pk }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+              </div>
+              <div class="modal-body">
+                ...
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+</td>
+{% endif %}
+</tr>
 {% endfor %}
+</table>
+<!-- End list of issues -->
+
+<!-- Pagination
+Graciously copied from: https://gist.github.com/BenAtWide/6506926
+ -->
+{% if is_paginated %}
+<div class="text-center" >
+<ul class="pagination">
+{% if page_obj.has_previous %}
+<li><a href="?page={{ page_obj.previous_page_number }}">
+{% else %}
+<li class="disabled"><a href="#">
+{% endif %}
+&laquo;</a></li>
+{% for p in page_obj.paginator.page_range %}
+<li class="{% if p == page_obj.number %}active{% endif %}"><a href="?page={{ p }}">{{ p }}</a></li>
+{% endfor %}
+{% if page_obj.has_next %}
+<li><a href="?page={{ page_obj.next_page_number }}">
+{% else %}
+<li class="disabled"><a href="#">
+{% endif %}
+&raquo;</a></li>
 </ul>
+</div>
+{% endif %}
+
+{% endblock %}

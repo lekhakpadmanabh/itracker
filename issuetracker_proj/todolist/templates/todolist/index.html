@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load humanize %}
+
+{%block title %}
+ToDo Lists 
+{% endblock %}
+
+{% block content %}
+
+<h2> To Dos </h2> <!-- --------------ToDo List Code Here------------- -->
+<div class="row">
+
+<div class="col-md-4">
+<div class="panel panel-default">
+  <div class="panel-heading">To Do</div>
+<ul class="list-group" id="todoList" contenteditable>
+  <li class="list-group-item" draggable="true">Apple</li>
+  <li class="list-group-item" draggable="true">Papeeta</li>
+  <li class="list-group-item" draggable="true">Banana</li>
+</ul>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="panel panel-default">
+  <div class="panel-heading">Doing</div>
+<ul class="list-group">
+  <li class="list-group-item">Cras justo odio</li>
+  <li class="list-group-item">Dapibus ac facilisis in</li>
+  <li class="list-group-item">Morbi leo risus</li>
+</ul>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="panel panel-default">
+  <div class="panel-heading">Done</div>
+<ul class="list-group">
+  <li class="list-group-item">Cras justo odio</li>
+  <li class="list-group-item">Dapibus ac facilisis in</li>
+  <li class="list-group-item">Morbi leo risus</li>
+</ul>
+</div>
+</div>
+
+<p class="pull-right"> <a href=javascript.void(); id="saveAll">Save Changes</a></p>
+</div>
+
+{% endblock %}

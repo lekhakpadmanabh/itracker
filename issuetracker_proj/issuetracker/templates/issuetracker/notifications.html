@@ -1,0 +1,14 @@
+Unread: 
+<ul>
+{% for msg in user_unread %}
+    <li> {{ msg }} </li>
+{% endfor %}
+</ul>
+
+Already read: 
+
+<ul>
+{% for msg in user_read %}
+    <li> {{ msg }} </li>
+{% endfor %}
+</ul>

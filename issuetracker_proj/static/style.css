@@ -1,0 +1,10 @@
+.tr-red {
+    border-left: 3px solid ;
+    border-left-color:red;
+}
+
+.issue-table {
+    margin-top:15px;
+    border:none;/* Doesn't work, how the heck do I remove borders? */
+}
+

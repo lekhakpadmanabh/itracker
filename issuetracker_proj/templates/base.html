@@ -1,0 +1,80 @@
+{% load mytags %}
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'style.css' %}" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="{% static 'font-awesome-4.0.3/css/font-awesome.min.css' %}" rel="stylesheet">
+    <title>Nagari: {%block title%} {% endblock %}</title>
+</head>
+<body>
+    <div class="container">
+    
+    <!-- Navbar -->
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">MN Issue Tracker</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li><a href="#">Stats</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filters <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">By staff member</a></li>
+                    <li><a href="#">By priority</a></li>
+                    <li><a href="#">By Category</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+              </form>
+              <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                
+                <li><a href="{% url 'issue_notifications_list' %}"> <span class="badge alert-danger" style="background-color:#e74c3c; color:white;">{% unread user %}</span> new</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Hi, {{ user.username }} <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Inbox</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{% url 'issue_logout' %}">Logout</a></li>
+                  </ul>
+                  </li>
+                {% else %}
+                <li><a href="#">Sign up</a></li>
+                <li><a href="{% url 'issue_login' %}"> Login </a></li>
+                {% endif %}
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+    <!-- End Navbar -->
+
+            {% block content %}
+            {% endblock %}
+    </div><!-- Container -->
+
+<!-- Javascript -->
+        <script src="{% static 'bootstrap/js/jquery.js' %}"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>
